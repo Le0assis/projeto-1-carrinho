@@ -1,6 +1,6 @@
 <?php
 
-class cart {
+class Cart {
 
     private array $products = [];   
     private array $cart = [];
@@ -8,9 +8,9 @@ class cart {
     public function __construct() {
 
         $this->products =[
-            ['id' => 1, 'nome' => 'Camiseta', 'preco' => 59.90, 'estoque' => 10],
-            ['id' => 2, 'nome' => 'Calça Jeans', 'preco' => 129.90, 'estoque' => 5],
-            ['id' => 3, 'nome' => 'Tênis', 'preco' => 199.90, 'estoque' => 3]
+            1 => ['id' => 1, 'nome' => 'Camiseta', 'preco' => 59.90, 'estoque' => 10],
+            2 => ['id' => 2, 'nome' => 'Calça Jeans', 'preco' => 129.90, 'estoque' => 5],
+            3 => ['id' => 3, 'nome' => 'Tênis', 'preco' => 199.90, 'estoque' => 3]
         ];
     }
 
@@ -22,39 +22,80 @@ class cart {
 
     public function addCart (int $id, int $quantity): void {
         if ($id <= 0){
-            throw new Exception('Produto inválido');
+            throw new Exception('<span>Produto inválido</span>');
         }
         if ($quantity <= 0){
-            throw new Exception('Quantidade inválida');
+            throw new Exception('<span>Quantidade inválida</span>');
         }        
         if (isset($this->cart[$id])) {
-            $this->cart[$id] += $quantity;
+            $this->cart[$id]['estoque'] += $quantity;
         }
-        if ($id > $this->products[$id]['estoque']) {
-            throw new Exception('Estoque inválido');
+        if ($quantity > $this->products[$id]['estoque']) {
+            throw new Exception('<span>Estoque inválido </span>');
         }
 
-        $this->cart[] = ['id_product'=> $id, 'quantity'=> $quantity, 'subtotal'=> calcTotal($id)];
+        $this->cart[] = ['id_product'=> $id, 'quantity'=> $quantity, 'subtotal'=> $this->calcSubTotal($id, $quantity)];
+
+        echo "<p> Produto adicionado </p>";
     }
        
     public function removeProduct(int $id){
         
-        if (!isset($this->cart[$id])){
-            throw new Exception("Produto invalido");
-        }
+        $found = false;
 
-        foreach ($this->cart as $products){
-            if ($products['id_product'] == $id){
-                unset($this->cart[$id]);
+        foreach ($this->cart as $key => $orderProducts){
+            if ($orderProducts['id_product'] == $id){
+                unset($this->cart[$key]);
+                echo "<p> Produto $id removido </p>";
+                $found = true;
             }
         }
+        if (!$found){
+            throw new Exception("<span>Produto invalido </span>");
+        }
+
+    }
+    public function getCart(){
+
+        foreach ($this->cart as $orderProducts){
+            
+            $product = $orderProducts['id_product'];
+
+
+            echo '<p>Nome do produto: ' . $this->products[$product]['nome']. '</p>';
+            echo '<p>Quantidade: ' . $orderProducts['quantity']. '</p>';
+            echo '<p>Preço: ' . $this->products[$product]['preco']. '</p>';
+            echo '<p>Subtotal: '. $orderProducts['subtotal']. '</p>';
+        }
+        echo '<p>Total: '. $this->calcTotal(). '</p>';
+            
+    }
+    public function calcSubTotal($id, $quantity){
+        
+        $preco = $this->products[$id]['preco'];
+        
+        return $preco * $quantity; 
     }
 
-    public function calcTotal($id){
+    public function calcTotal (){
+        $total = 0;
+        foreach ($this->cart as $products) {
+            $total += $products['subtotal'];
+        }
+        return $total;
+    }
+
+    public function applyDiscount(){
+        
+        $discount = 10;
+        $total = $this->calcTotal();
+
+        $value_discounted = $total * ($discount /100); 
+
+        echo 'seu total sera de ' .  $total - $value_discounted;
         
     }
-
-
+    
 }
 
 ?></php>
