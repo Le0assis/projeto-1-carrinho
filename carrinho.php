@@ -31,7 +31,7 @@ class Cart {
             $this->cart[$id]['estoque'] += $quantity;
         }
         if ($quantity > $this->products[$id]['estoque']) {
-            throw new Exception('<span>Estoque inválido </span>');
+            throw new Exception('<span>Estoque insuficiente </span>');
         }
 
         $this->cart[] = ['id_product'=> $id, 'quantity'=> $quantity, 'subtotal'=> $this->calcSubTotal($id, $quantity)];
@@ -85,17 +85,20 @@ class Cart {
         return $total;
     }
 
-    public function applyDiscount(){
+
+    
+    public function applyDiscount ($discount){
         
-        $discount = 10;
+        $discount_value = substr($discount ,-2);
+        $discount_value_int = intval($discount_value);
         $total = $this->calcTotal();
 
-        $value_discounted = $total * ($discount /100); 
-
-        echo 'seu total sera de ' .  $total - $value_discounted;
+        $final_discount = $total *($discount_value_int /100);
         
+
+        echo 'seu total sera de ' .  $total - $final_discount;
     }
-    
 }
+
 
 ?></php>
