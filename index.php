@@ -1,18 +1,18 @@
 <?php
 
-require_once __DIR__ . '/carrinho.php';
+require_once __DIR__ . '/Cart.php';
 
 
 $carrinho1 = new Cart();
 
-$carrinho1->addCart(1, 2);
+echo $carrinho1->addCart(1, 2);
 
-// $carrinho1->addCart(2, 10);
-
-
-// $carrinho1->removeProduct(2);
+//echo $carrinho1->addCart(2, 10);
 
 
-$carrinho1->getCart();
+//echo $carrinho1->removeProduct(2);
 
-$carrinho1->applyDiscount('DESCONTO10');
+
+echo $carrinho1->getCart();
+
+echo $carrinho1->applyDiscount('DESCONTO10');
