@@ -1,3 +1,6 @@
+>Leonardo Ribeiro de Assis
+>1995764
+
 # Simulador de Carrinho de Compras
 
 Projeto desenvolvido para a disciplina de Design Patterns & Clean Code.
